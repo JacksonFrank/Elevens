@@ -4,12 +4,12 @@ import java.util.ArrayList;
 /**
  * The ElevensBoard class represents the board in a game of Elevens.
  */
-public class ElevensBoard extends Board {
+public class ThirteensBoard extends Board {
 
 	/**
 	 * The size (number of cards) on the board.
 	 */
-	private static final int BOARD_SIZE = 9;
+	private static final int BOARD_SIZE = 10;
 
 	/**
 	 * The ranks of the cards for this game to be sent to the deck.
@@ -27,7 +27,7 @@ public class ElevensBoard extends Board {
 	 * The values of the cards for this game to be sent to the deck.
 	 */
 	private static final int[] POINT_VALUES =
-		{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 0, 0};
+		{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 0};
 
 	/**
 	 * Flag used to control debugging print statements.
@@ -38,7 +38,7 @@ public class ElevensBoard extends Board {
 	/**
 	 * Creates a new <code>ElevensBoard</code> instance.
 	 */
-	 public ElevensBoard() {
+	 public ThirteensBoard() {
 	 	super(BOARD_SIZE, RANKS, SUITS, POINT_VALUES);
 	 }
 
@@ -54,10 +54,10 @@ public class ElevensBoard extends Board {
 	@Override
 	public boolean isLegal(List<Integer> selectedCards) {
 		if(selectedCards.size() == 2) {
-			return containsPairSum11(selectedCards);
+			return containsPairSum13(selectedCards);
 		}
-		else if(selectedCards.size() == 3) {
-			return containsJQK(selectedCards);
+		else if(selectedCards.size() == 1) {
+			return containsK(selectedCards);
 		}
 		else {
 			return false;
@@ -77,25 +77,22 @@ public class ElevensBoard extends Board {
 
 		List<Integer> cards = cardIndexes();
 		for(int i : cards) {
+			List<Integer> currentCards = new ArrayList<Integer>();
+			currentCards.add(cards.get(i));
+			if(containsK(currentCards)) {
+				return true;
+			}
+			
 			for(int j : cards) {
 				if(i != j) {
-					List<Integer> currentCards = new ArrayList<Integer>();
-					currentCards.add(cards.get(i));
-					currentCards.add(cards.get(j));
-					if(containsPairSum11(currentCards)) {
+					List<Integer> currentCards2 = new ArrayList<Integer>();
+					currentCards2.add(cards.get(i));
+					currentCards2.add(cards.get(j));
+					if(containsPairSum13(currentCards2)) {
 						return true;
 					}
-				}
-				for(int h : cards) {
-					if(i != j && i != h) {
-						List<Integer> currentCards = new ArrayList<Integer>();
-						currentCards.add(cards.get(i));
-						currentCards.add(cards.get(j));
-						currentCards.add(cards.get(h));
-						if(containsJQK(currentCards)) {
-							return true;
-						}
-					}
+				
+				
 				}
 			}
 		}
@@ -110,12 +107,12 @@ public class ElevensBoard extends Board {
 	 * @return true if the board entries in selectedCards
 	 *              contain an 11-pair; false otherwise.
 	 */
-	private boolean containsPairSum11(List<Integer> selectedCards) {
+	private boolean containsPairSum13(List<Integer> selectedCards) {
 		
 		
 		if(selectedCards.size() == 2) {
 			int i = cardAt(selectedCards.get(0)).pointValue() + cardAt(selectedCards.get(1)).pointValue();
-			if(i == 11) {
+			if(i == 13) {
 				return true;
 			}
 		}
@@ -130,25 +127,10 @@ public class ElevensBoard extends Board {
 	 * @return true if the board entries in selectedCards
 	 *              include a jack, a queen, and a king; false otherwise.
 	 */
-	private boolean containsJQK(List<Integer> selectedCards) {
-		boolean j = false, q = false, k = false;
-		
-		if(selectedCards.size() == 3) {
+	private boolean containsK(List<Integer> selectedCards) {
+		if(selectedCards.size() == 1) {
 			
-			for(int i : selectedCards) {
-				switch(cardAt(i).rank()) {
-				case "jack":
-					j = true;
-					break;
-				case "queen":
-					q = true;
-					break;
-				case "king":
-					k = true;
-					break;
-				}
-			}
-			if(j == true && q == true && k == true) {
+			if(cardAt(selectedCards.get(0)).rank() == "king") {
 				return true;
 			}
 		

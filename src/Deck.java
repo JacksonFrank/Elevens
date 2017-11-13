@@ -7,6 +7,9 @@ import java.util.ArrayList;
  *      initialize, shuffle, deal, and check if empty.
  */
 public class Deck {
+	
+	
+	static final boolean DEBUGGING = true;
 
 	/**
 	 * cards contains all the cards in the deck.
@@ -33,9 +36,9 @@ public class Deck {
 		
 		cards = new ArrayList<Card>();
 		
-		for(int i = 0; i < ranks.length; i++) {
-			for(int j = 0; j < suits.length; j++) {
-				cards.add(new Card(ranks[i], suits[j], values[i]));
+		for(int i = 0; i < suits.length; i++) {
+			for(int j = 0; j < ranks.length; j++) {
+				cards.add(new Card(ranks[j], suits[i], values[j]));
 			}
 		}
 		size = cards.size();
@@ -70,13 +73,20 @@ public class Deck {
 	 */
 	public void shuffle() {
 		size = cards.size();
+		ArrayList<Card> _Cards = new ArrayList<Card>();
+		for(Card c : cards) {
+			_Cards.add(c);
+		}
 		int[] _cards = new int[size];
 		for(int i = 0; i < size; i++) {
 			_cards[i] = i;
 		}
 		Shuffler.selectionShuffle(_cards);
 		for(int i = 0; i < size; i ++) {
-			cards.set(_cards[i], cards.get(i));
+			cards.set(_cards[i], _Cards.get(i));
+		}
+		if(DEBUGGING) {
+			System.out.println(toString());
 		}
 	}
 

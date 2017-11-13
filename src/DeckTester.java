@@ -79,7 +79,5 @@ public class DeckTester {
 		
 	}
 	
-	public static printCards(ElevensBoard board) {
-		
-	}
+	
 }
